@@ -20,12 +20,16 @@ def ask_question(question_data, question_number):
     user_input = input("Your answer (enter the letter corresponding to the option): ")
     return user_input.upper()
 
+
 def main():
     print("Welcome to the English Quiz!")
+    name = menu.username()  # Get the user's name
+    print(f"Hello, {name}!")
+
     user_choice = menu.get_user_choice()
 
     if user_choice == '1':
-        grade = input("Enter your grade (a1-a2, b1-b2, etc.): ")
+        grade = input("Enter your grade (a1-a2, b1-b2, etc.): ").upper
         questions_to_ask = 5
         total_correct = 0
 
@@ -60,9 +64,10 @@ def main():
         score = (total_correct / questions_to_ask) * 10
         print(f"Quiz completed! Your score: {score:.2f}/10")
     else:
-        print("Goodbye!")
+        print("\nGoodbye!")
 
     conn.close()
 
 if __name__ == "__main__":
     main()
+print()
