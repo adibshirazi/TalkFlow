@@ -1,50 +1,68 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
 import sqlite3
-import os
+import random
+import menu
 
-if not os.path.exists("app_data.db"):
-    conn = sqlite3.connect("app_data.db")
-    cursor = conn.cursor()
+# Establish a connection to the SQLite database
+conn = sqlite3.connect("app_data.db")
+cursor = conn.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                        id INTEGER PRIMARY KEY,
-                        username TEXT
-                    )''')
+def fetch_questions(grade):
+    cursor.execute("SELECT question, options, answer FROM qa_table WHERE grade=?", (grade,))
+    return cursor.fetchall()
 
-    conn.commit()
+def ask_question(question_data, question_number):
+    question, options, answer = question_data
+    options_list = options.split(",")  # Assuming options are stored as a comma-separated string
+    print(f"Question {question_number}: {question}")
+    for option in options_list:
+        print(option)
+    
+    user_input = input("Your answer (enter the letter corresponding to the option): ")
+    return user_input.upper()
+
+def main():
+    print("Welcome to the English Quiz!")
+    user_choice = menu.get_user_choice()
+
+    if user_choice == '1':
+        grade = input("Enter your grade (a1-a2, b1-b2, etc.): ")
+        questions_to_ask = 5
+        total_correct = 0
+
+        questions = fetch_questions(grade)
+
+        if len(questions) < questions_to_ask:
+            print("Not enough questions for your grade level.")
+            return
+
+        random.shuffle(questions)
+        asked_questions = set()
+
+        for question_number, question_data in enumerate(questions, start=1):
+            while True:
+                if question_data in asked_questions:
+                    question_data = random.choice(questions)
+                else:
+                    asked_questions.add(question_data)
+                    break
+
+            user_answer = ask_question(question_data, question_number)
+            correct_answer = question_data[2]
+            if user_answer == correct_answer[0]:
+                total_correct += 1
+                print("Correct!\n")
+            else:
+                print(f"Wrong. The correct answer is: {correct_answer}\n")
+
+            if question_number == questions_to_ask:
+                break
+
+        score = (total_correct / questions_to_ask) * 10
+        print(f"Quiz completed! Your score: {score:.2f}/10")
+    else:
+        print("Goodbye!")
+
     conn.close()
 
-class LanguageQuizApp(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Language Learning Quiz App -ByASH")
-        
-        self.init_ui()
-
-    def init_ui(self):
-        label = QLabel("Welcome to the Language Quiz App", self)
-        label.setGeometry(50, 50, 300, 50)
-        
-        start_button = QPushButton("Start Quiz", self)
-        start_button.setGeometry(50, 100, 200, 50)
-        start_button.clicked.connect(self.start_quiz)
-
-    def start_quiz(self):
-        # Start the quiz logic here
-        with open('text.txt') as text:
-            lines = text.readlines()
-        
-
-    def start_quiz_api(self):
-        # this section is for the api of the app
-        
-        pass
-
-
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = LanguageQuizApp()
-    window.setGeometry(100, 100, 400, 300)
-    window.show()
-    sys.exit(app.exec_())
+    main()
