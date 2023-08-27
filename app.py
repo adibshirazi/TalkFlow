@@ -29,7 +29,7 @@ def main():
     user_choice = menu.get_user_choice()
 
     if user_choice == '1':
-        grade = input("Enter your grade (a1-a2, b1-b2, etc.): ").upper
+        grade = input("Enter your grade (a1-a2, b1-b2, etc.): ").upper()
         questions_to_ask = 5
         total_correct = 0
 
@@ -70,4 +70,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-print()
