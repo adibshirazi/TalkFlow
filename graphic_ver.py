@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk  
 from tkinter import messagebox, simpledialog
 import sqlite3
 import random
@@ -12,18 +13,28 @@ class EnglishQuizApp:
         self.root = root
         self.root.title("English Quiz App")
 
-        self.label = tk.Label(self.root, text="Welcome to the English Quiz!")
-        self.label.pack()
+        self.style = ttk.Style()  # Create a style instance
+        self.style.configure("TButton", padding=10, relief="flat", background="#007acc", foreground="black")
 
-        self.start_button = tk.Button(self.root, text="Start Quiz", command=self.start_quiz)
-        self.start_button.pack()
+        self.label = ttk.Label(self.root, text="Welcome to the English Quiz!", font=("Helvetica", 16, "bold"))
+        self.label.pack(pady=15)
 
-        self.exit_button = tk.Button(self.root, text="Exit", command=self.root.quit)
-        self.exit_button.pack()
+        self.label = ttk.Label(self.root, text="Demo Ver", font=("Helvetica", 16, "bold"))
+        self.label.pack(pady=1)
+
+        self.start_button = ttk.Button(self.root, text="Start Quiz", command=self.start_quiz)
+        self.start_button.pack(pady=10)
+
+        self.exit_button = ttk.Button(self.root, text="Exit", command=self.root.quit)
+        self.exit_button.pack(pady=10)
+
+        self.label = ttk.Label(self.root, text="By ASH", font=("Helvetica", 13, "bold"))
+        self.label.pack(pady=33)
 
     def fetch_questions(self, grade):
         cursor.execute("SELECT question, options, answer FROM qa_table WHERE grade=?", (grade,))
         return cursor.fetchall()
+    
 
     def ask_question(self, question_data, question_number):
         question, options, answer = question_data
@@ -78,8 +89,16 @@ class EnglishQuizApp:
 
 def main():
     root = tk.Tk()
+    root.geometry("300x300")
+    window_width = root.winfo_reqwidth()
+    window_height = root.winfo_reqheight()
+    position_right = int(root.winfo_screenwidth() / 2 - window_width / 2)
+    position_down = int(root.winfo_screenheight() / 2 - window_height / 2)
+    root.geometry(f"+{position_right}+{position_down}")
+
     app = EnglishQuizApp(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
