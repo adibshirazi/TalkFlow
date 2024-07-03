@@ -53,10 +53,14 @@ class EnglishQuizApp:
         grade = simpledialog.askstring("Enter Grade", "Enter your grade (a1-a2, b1-b2, etc.):").upper()
         questions_to_ask = 5
         total_correct = 0
-
         questions = self.fetch_questions(grade)
+        levels = ["A1-A2", "B1-B2"]
+        if grade not in levels:
+            messagebox.showerror("Error", "Please try again!")
+            return
 
-        if len(questions) < questions_to_ask:
+
+        elif len(questions) < questions_to_ask:
             messagebox.showerror("Error", "Not enough questions for your grade level.")
             return
 
