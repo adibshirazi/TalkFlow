@@ -1,6 +1,11 @@
 import sqlite3
 import random
 import menu
+import word_practice
+import sys
+import graphic_ver
+
+
 
 # Establish a connection to the SQLite database
 conn = sqlite3.connect("app_data.db")
@@ -23,11 +28,9 @@ def ask_question(question_data, question_number):
 
 
 def grades():
-    user_choice = menu.get_user_choice()
 
-    if user_choice == '1':
-        grade = str(input("Enter your grade (a1-a2, b1-b2, etc.): ").upper())
-        return grade
+    grade = str(input("Enter your grade (a1-a2, b1-b2, etc.): ").upper())
+    return grade
 
 
 def main():
@@ -79,6 +82,14 @@ def main():
     print(f"Quiz completed! Your score: {score:.2f}/10")
 
     conn.close()
+while True:
 
-if __name__ == "__main__":
-    main()
+    menu_command = menu.get_user_choice()
+    if menu_command == '1':
+        main()
+    elif menu_command == '2':
+        graphic_ver.main()
+    elif menu_command == '3':
+        word_practice.main()
+    elif menu_command == '4':
+        sys.exit("GoodBye!")
