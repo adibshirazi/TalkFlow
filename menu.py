@@ -18,13 +18,15 @@ def username():
 
 def display_menu():
     print("1. Start Quiz")
-    print("2. Exit")
+    print("2. Start Quiz (graphic)")
+    print("3. Word Practice")
+    print("4. Exit")
     choice = input("Enter your choice: ")
     return choice
 
 def get_user_choice():
     choice = display_menu()
-    while choice not in ('1', '2'):
+    while choice not in ('1', '2', '3', '4'):
         print("Invalid choice. Please select again.")
         choice = display_menu()
     return choice
