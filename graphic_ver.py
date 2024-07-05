@@ -4,6 +4,7 @@ from tkinter import messagebox, simpledialog
 import sqlite3
 import random
 import menu
+import os
 
 conn = sqlite3.connect("app_data.db")
 cursor = conn.cursor()
@@ -25,7 +26,7 @@ class EnglishQuizApp:
         self.start_button = ttk.Button(self.root, text="Start Quiz", command=self.start_quiz)
         self.start_button.pack(pady=10)
 
-        self.exit_button = ttk.Button(self.root, text="Exit", command=self.root.quit)
+        self.exit_button = ttk.Button(self.root, text="Exit", command=self.exit_app)
         self.exit_button.pack(pady=10)
 
         self.label = ttk.Label(self.root, text="By ASH", font=("Helvetica", 13, "bold"))
@@ -34,7 +35,9 @@ class EnglishQuizApp:
     def fetch_questions(self, grade):
         cursor.execute("SELECT question, options, answer FROM qa_table WHERE grade=?", (grade,))
         return cursor.fetchall()
-    
+    def exit_app(self):
+        self.root.destroy() 
+        os._exit(0)
 
     def ask_question(self, question_data, question_number):
         question, options, answer = question_data
