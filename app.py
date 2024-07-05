@@ -4,6 +4,7 @@ import menu
 import word_practice
 import sys
 import graphic_ver
+import os
 
 
 
@@ -86,10 +87,14 @@ while True:
 
     menu_command = menu.get_user_choice()
     if menu_command == '1':
+        os.system('cls' if os.name == 'nt' else 'clear')
         main()
     elif menu_command == '2':
+        os.system('cls' if os.name == 'nt' else 'clear')
         graphic_ver.main()
     elif menu_command == '3':
+        os.system('cls' if os.name == 'nt' else 'clear')
         word_practice.main()
     elif menu_command == '4':
+        os.system('cls' if os.name == 'nt' else 'clear')
         sys.exit("GoodBye!")

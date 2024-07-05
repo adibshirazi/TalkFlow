@@ -1,5 +1,6 @@
 # menu.py
 import sqlite3
+import os
 
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
@@ -17,6 +18,7 @@ def username():
         return user_record[0]  # Assuming name is the first column
 
 def display_menu():
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("1. Start Quiz")
     print("2. Start Quiz (graphic)")
     print("3. Word Practice")

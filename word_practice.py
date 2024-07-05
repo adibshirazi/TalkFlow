@@ -13,8 +13,8 @@ import time
 
 
 def main():
-    
-    print("Welcome to Word Practicing section!")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Welcome to Word Practicing section!\n")
   
     
     if str(date_checker()) != str(date.today()):
