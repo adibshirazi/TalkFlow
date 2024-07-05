@@ -26,7 +26,7 @@ def main():
         dict_counter = 0
         conn = sqlite3.connect('app_data.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT word, definition FROM Words")
+        cursor.execute("SELECT word, definition FROM Words ORDER BY RANDOM()")
 
         words_def = cursor.fetchall()
         for i in range(10):
