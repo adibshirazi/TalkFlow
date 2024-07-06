@@ -2,7 +2,7 @@
 import sqlite3
 import os
 
-conn = sqlite3.connect("users.db")
+conn = sqlite3.connect("app_data.db")
 cursor = conn.cursor()
 
 def username():
@@ -19,6 +19,7 @@ def username():
 
 def display_menu():
     os.system('cls' if os.name == 'nt' else 'clear')
+    username()
     print("1. Start Quiz")
     print("2. Start Quiz (graphic)")
     print("3. Word Practice")
