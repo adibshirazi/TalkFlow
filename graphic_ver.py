@@ -1,10 +1,14 @@
 import tkinter as tk
-from tkinter import ttk  
+from tkinter import ttk
 from tkinter import messagebox, simpledialog
+from tkinter.scrolledtext import ScrolledText
 import sqlite3
 import random
 import menu
 import os
+import word_practice
+from datetime import date
+import time
 
 conn = sqlite3.connect("app_data.db")
 cursor = conn.cursor()
@@ -17,26 +21,24 @@ class EnglishQuizApp:
         self.style = ttk.Style()  # Create a style instance
         self.style.configure("TButton", padding=10, relief="flat", background="#007acc", foreground="black")
 
-        self.label = ttk.Label(self.root, text="Welcome to the English Quiz!", font=("Helvetica", 16, "bold"))
+        self.label = ttk.Label(self.root, text="Welcome to Talk Flow", font=("Helvetica", 16, "bold"))
         self.label.pack(pady=15)
 
-        self.label = ttk.Label(self.root, text="Demo Ver", font=("Helvetica", 16, "bold"))
-        self.label.pack(pady=1)
+        self.start_button_quiz = ttk.Button(self.root, text="Start Quiz", command=self.start_quiz)
+        self.start_button_quiz.pack(pady=10)
 
-        self.start_button = ttk.Button(self.root, text="Start Quiz", command=self.start_quiz)
-        self.start_button.pack(pady=10)
+        self.start_button_word_practice = ttk.Button(self.root, text="Word Practice", command=self.start_word_practice)
+        self.start_button_word_practice.pack(pady=10)
 
         self.exit_button = ttk.Button(self.root, text="Exit", command=self.exit_app)
         self.exit_button.pack(pady=10)
 
-        self.label = ttk.Label(self.root, text="By ASH", font=("Helvetica", 13, "bold"))
-        self.label.pack(pady=33)
-
     def fetch_questions(self, grade):
         cursor.execute("SELECT question, options, answer FROM qa_table WHERE grade=?", (grade,))
         return cursor.fetchall()
+
     def exit_app(self):
-        self.root.destroy() 
+        self.root.destroy()
         os._exit(0)
 
     def ask_question(self, question_data, question_number):
@@ -48,6 +50,56 @@ class EnglishQuizApp:
 
         user_input = simpledialog.askstring("Quiz Question", question_text + options_text + "\nYour answer:")
         return user_input.upper()
+
+    def start_word_practice(self):
+        name = menu.username()
+        messagebox.showinfo("Welcome", f"Hello, {name}!")
+
+
+        if str(word_practice.date_checker()) != str(date.today()):
+            messagebox.showinfo("Welcome", f"Hello, {name}!")
+            
+
+
+        
+        new_window = tk.Toplevel(self.root)
+        new_window.title("Word Practice")
+        new_window.geometry("400x300")
+        
+        self.word_label = ttk.Label(new_window, text="", font=("Helvetica", 14))
+        self.word_label.pack(pady=10)
+        
+        self.definition_text = ScrolledText(new_window, wrap=tk.WORD, font=("Helvetica", 12), height=5, width=40)
+        self.definition_text.pack(pady=10)
+        
+        self.next_button = ttk.Button(new_window, text="Next Word", command=self.show_next_word)
+        self.next_button.pack(pady=10)
+        
+        self.word_counter = 0
+
+        if str(word_practice.date_checker()) == str(date.today()):
+            self.words_def = self.fetch_words()
+            if self.words_def:
+                self.show_next_word()
+            else:
+                messagebox.showinfo("No Words", "No words available for practice.")
+                new_window.destroy()
+
+    def fetch_words(self):
+        cursor.execute("SELECT word, definition FROM Words ORDER BY RANDOM()")
+        words = cursor.fetchall()
+        return words
+
+    def show_next_word(self):
+        if self.word_counter < len(self.words_def) and self.word_counter < 10:
+            word, definition = self.words_def[self.word_counter]
+            self.word_label.config(text=f"Word: {word}")
+            self.definition_text.delete(1.0, tk.END)  # Clear previous text
+            self.definition_text.insert(tk.END, f"Definition: {definition}")
+            self.word_counter += 1
+        else:
+            messagebox.showinfo("Completed", "You have completed the word practice session!")
+            self.next_button.config(state="disabled")
 
     def start_quiz(self):
         name = menu.username()
@@ -61,7 +113,6 @@ class EnglishQuizApp:
         if grade not in levels:
             messagebox.showerror("Error", "Please try again!")
             return
-
 
         elif len(questions) < questions_to_ask:
             messagebox.showerror("Error", "Not enough questions for your grade level.")
@@ -91,7 +142,7 @@ class EnglishQuizApp:
 
         score = (total_correct / questions_to_ask) * 10
         messagebox.showinfo("Quiz Completed", f"Quiz completed! Your score: {score:.2f}/10")
-    
+
         conn.close()
 
 def main():
@@ -105,7 +156,6 @@ def main():
 
     app = EnglishQuizApp(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
