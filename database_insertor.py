@@ -16,6 +16,13 @@ with open('answers.txt', 'r') as answers_file:
 questions = questions_data.split('Question ')
 answers = answers_data.split('Answer ')
 
+while True:
+    level = input("Grade (A1-A2, B1-B2, C1-C2): ").upper()
+    if level in ['A1-A2', 'B1-B2', 'C1-C2']:
+        break
+    else:
+        print("Invalid grade. Please enter A1-A2, B1-B2, or C1-C2.")
+
 # Iterate through the questions and answers and insert them into the database
 for question, answer in zip(questions[1:], answers[1:]):
     question_lines = question.strip().split('\n')
@@ -30,7 +37,7 @@ for question, answer in zip(questions[1:], answers[1:]):
     
     db_cursor.execute(
         "INSERT INTO qa_table (question, options, answer, grade) VALUES (?, ?, ?, ?)",
-        (question_text, options_text, answer_text, "A1-A2")
+        (question_text, options_text, answer_text, level)
     )
 
 # Commit the changes and close the database connection
