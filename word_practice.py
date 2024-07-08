@@ -4,11 +4,7 @@ from datetime import date
 import os
 import menu
 import time
-
-
-#https://api.api-ninjas.com/v1/randomword
-#https://wordsapiv1.p.mashape.com/words/Aranyaka
-
+import sys
 
 
 
@@ -18,10 +14,14 @@ def main():
   
     
     if str(date_checker()) != str(date.today()):
-            print("reciveing the data...")
-            database()
-            print("Done.")
-        
+            try:
+                print("reciveing the data...")
+                database()
+                print("Done.")
+            except:
+                print("An Error happend. Please check your internet connection.")
+                time.sleep(3)
+                sys.exit(1)
     elif str(date_checker()) == str(date.today()):
         dict_counter = 0
         conn = sqlite3.connect('app_data.db')
