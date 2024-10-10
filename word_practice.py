@@ -52,8 +52,8 @@ def word():
 
     word_api = "https://api.api-ninjas.com/v1/randomword"
 
-
-    response = requests.get(word_api, headers={'X-Api-Key': 'REDACTED'})
+    # add your api-key
+    response = requests.get(word_api, headers={'X-Api-Key': 'add_your_api_key'})
  
 
     word_data = response.json()
@@ -66,9 +66,9 @@ def word():
 def definition():
 
     words = word() 
-
+    # add your api-key
     definition_api = 'https://api.api-ninjas.com/v1/dictionary?word={}'.format(words)
-    response = requests.get(definition_api, headers={'X-Api-Key': 'REDACTED'})
+    response = requests.get(definition_api, headers={'X-Api-Key': 'add_your_api_key'})
     definition_data = response.json()
     
     extracted_definition = (definition_data["definition"])
